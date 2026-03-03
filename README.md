@@ -26,35 +26,6 @@ This skill allows you to spawn multiple specialized AI agents (Sub-Agents) to wo
 [Tab] View  [w,s] Select  [k] Kill  [s] Shutdown  [q] Quit
 ```
 
-### Agent One-Shot Prompt (Update/Upgrade)
-
-```text
-Update this repository safely and re-validate without reinstalling from scratch.
-
-Repository path: <your-install-path>/antigravity-swarm
-
-Do this exactly:
-1) Check current git status and branch.
-2) Pull latest changes safely (no destructive operations).
-3) Reinstall/refresh Python dependencies only if requirements.txt changed.
-4) Run validation:
-   - gemini --version
-   - python3 -m py_compile scripts/*.py scripts/core/*.py scripts/core/backends/*.py
-   - python3 scripts/orchestrator.py --demo
-5) If nvim/neovim config files exist in this repo and changed, apply/update them; otherwise report "no nvim update needed".
-
-Safety rules:
-- Never run destructive git commands (reset --hard, clean -fd, force push, checkout --).
-- If merge/rebase conflicts happen, stop and report files with conflicts.
-
-Final report format:
-- Pulled: yes/no
-- Dependency refresh: yes/no
-- Validation: pass/fail
-- Nvim update: applied/skipped
-- Next action: one line
-```
-
 > [!IMPORTANT] 
 > **Why do you need this?**
 >
@@ -102,6 +73,22 @@ Antigravity Swarm has evolved from a batch orchestrator to a **live agent team p
 - **Inter-Agent Communication**: Agents can message each other to coordinate, share findings, or request help.
 - **Quality Assurance**: Every team includes a mandatory **Validator Agent** who reviews the work before completion, ensuring high quality.
 - **Resume Support**: Interrupted missions can be resumed from the last checkpoint.
+
+---
+
+## Prerequisites
+
+Before installing, ensure you have the following:
+
+| Requirement | Install Command | Notes |
+|------------|----------------|-------|
+| **Node.js** (v18+) | [nodejs.org](https://nodejs.org) | Required for Gemini CLI |
+| **Gemini CLI** | `npm install -g @google/gemini-cli` | Core dependency — agents run on Gemini |
+| **Python 3.8+** | [python.org](https://python.org) | Runtime for orchestrator scripts |
+| **pip packages** | `pip install -r requirements.txt` | `rich`, `pyyaml` |
+
+> [!TIP]
+> If Gemini CLI is not installed, the planner will offer to install it automatically when you first run a mission.
 
 ---
 
@@ -153,6 +140,35 @@ Final report format:
 
 4.  **Configuration (Optional)**: Create `swarm-config.yaml` in the project root to define team presets and customize behavior.
 
+### Agent One-Shot Prompt (Update/Upgrade)
+
+```text
+Update this repository safely and re-validate without reinstalling from scratch.
+
+Repository path: <your-install-path>/antigravity-swarm
+
+Do this exactly:
+1) Check current git status and branch.
+2) Pull latest changes safely (no destructive operations).
+3) Reinstall/refresh Python dependencies only if requirements.txt changed.
+4) Run validation:
+   - gemini --version
+   - python3 -m py_compile scripts/*.py scripts/core/*.py scripts/core/backends/*.py
+   - python3 scripts/orchestrator.py --demo
+5) If nvim/neovim config files exist in this repo and changed, apply/update them; otherwise report "no nvim update needed".
+
+Safety rules:
+- Never run destructive git commands (reset --hard, clean -fd, force push, checkout --).
+- If merge/rebase conflicts happen, stop and report files with conflicts.
+
+Final report format:
+- Pulled: yes/no
+- Dependency refresh: yes/no
+- Validation: pass/fail
+- Nvim update: applied/skipped
+- Next action: one line
+```
+
 ---
 
 ## User Manual
@@ -193,6 +209,47 @@ python3 scripts/ultrawork_loop.py --resume
 ### Path C: Antigravity IDE
 
 Add this skill to `~/.gemini/GEMINI.md` and the main agent can trigger it automatically for complex tasks.
+
+---
+
+## Example Prompts
+
+Not sure how to start? Copy-paste one of these prompts to your LLM agent:
+
+### Basic Usage
+
+```text
+antigravity-swarm 스킬을 이용해서 이 프로젝트에 대한 단위 테스트를 작성해줘.
+```
+
+```text
+Use the antigravity-swarm skill to refactor the authentication module in this project.
+```
+
+### Advanced Usage
+
+```text
+antigravity-swarm 스킬의 fullstack 프리셋을 이용해서 React 기반의 Todo 앱을 만들어줘.
+```
+
+```text
+Use the antigravity-swarm skill with the research preset to analyze the codebase architecture and generate documentation.
+```
+
+### Direct CLI Usage
+
+```bash
+# Quick mission with preset
+python3 scripts/planner.py --preset quick "Write unit tests for all Python modules"
+python3 scripts/orchestrator.py --yes
+
+# Full-stack team for a complex task
+python3 scripts/planner.py --preset fullstack "Build a REST API with authentication"
+python3 scripts/orchestrator.py --yes
+```
+
+> [!TIP]
+> When using from an IDE agent, simply describe your task in natural language with "antigravity-swarm 스킬을 이용해서" (Korean) or "Use the antigravity-swarm skill to" (English) as a prefix.
 
 ---
 

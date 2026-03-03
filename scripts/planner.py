@@ -11,7 +11,7 @@ import time
 import yaml
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.core.config import get_gemini_path, SwarmConfig, ensure_dirs, STATE_DIR
+from scripts.core.config import get_gemini_path, ensure_gemini_cli, SwarmConfig, ensure_dirs, STATE_DIR
 from scripts.core.types import AgentIdentity, assign_color
 
 CONFIG_FILE = "subagents.yaml"
@@ -375,10 +375,8 @@ def main():
 
     print("[Planner] Consulting with Supervisor Agent...")
 
-    gemini_path = get_gemini_path()
+    gemini_path = ensure_gemini_cli()
     if not gemini_path:
-        print("Error: 'gemini' executable not found.")
-        print("Please resolve this by:\n1. Installing gemini CLI.\n2. Ensuring it is in your PATH.\n3. Or setting GEMINI_PATH environment variable.")
         sys.exit(1)
 
     full_prompt = generate_prompt(mission)

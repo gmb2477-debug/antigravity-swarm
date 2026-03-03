@@ -22,35 +22,6 @@
 [Tab] View  [w,s] Select  [k] Kill  [s] Shutdown  [q] Quit
 ```
 
-### 에이전트 원샷 프롬프트 (업데이트/업그레이드)
-
-```text
-재설치 없이 이 레포를 안전하게 업데이트하고 재검증하세요.
-
-레포 경로: <your-install-path>/antigravity-swarm
-
-작업 순서:
-1) 현재 git status와 branch 확인
-2) 최신 변경사항 안전하게 pull (파괴적 명령 금지)
-3) requirements.txt가 바뀐 경우에만 Python 의존성 갱신
-4) 검증 실행
-   - gemini --version
-   - python3 -m py_compile scripts/*.py scripts/core/*.py scripts/core/backends/*.py
-   - python3 scripts/orchestrator.py --demo
-5) nvim/neovim 설정 파일이 이 레포에 존재하고 변경된 경우 적용/업데이트, 아니면 "nvim 업데이트 불필요" 보고
-
-안전 규칙:
-- 파괴적 git 명령 금지 (reset --hard, clean -fd, force push, checkout --)
-- merge/rebase 충돌 발생 시 즉시 중단하고 충돌 파일 목록 보고
-
-최종 보고 형식:
-- Pull: 성공/실패
-- 의존성 갱신: 수행/미수행
-- 검증: 통과/실패
-- nvim 업데이트: 적용/스킵
-- 다음 액션: 1줄
-```
-
 > [!IMPORTANT]
 > **왜 이 스킬이 필요한가요?**
 > 2026-03-02 기준, Gemini CLI나 Antigravity IDE에는 서브에이전트를 배포할 수 있는 **네이티브 기능이 존재하지 않습니다.**
@@ -162,6 +133,22 @@ python3 scripts/planner.py --preset fullstack "Todo 앱 만들어줘"
 
 ---
 
+## 사전 요구사항 (Prerequisites)
+
+설치 전에 다음 항목이 준비되어 있는지 확인하세요:
+
+| 요구사항 | 설치 명령어 | 비고 |
+|---------|-----------|------|
+| **Node.js** (v18+) | [nodejs.org](https://nodejs.org) | Gemini CLI 실행에 필요 |
+| **Gemini CLI** | `npm install -g @google/gemini-cli` | 핵심 의존성 — 에이전트가 Gemini 위에서 동작 |
+| **Python 3.8+** | [python.org](https://python.org) | 오케스트레이터 스크립트 런타임 |
+| **pip 패키지** | `pip install -r requirements.txt` | `rich`, `pyyaml` |
+
+> [!TIP]
+> Gemini CLI가 설치되어 있지 않은 경우, 첫 미션 실행 시 자동으로 설치를 제안합니다.
+
+---
+
 ## 설치 방법 (Installation)
 
 > [!TIP]
@@ -226,6 +213,35 @@ python3 scripts/planner.py --preset fullstack "Todo 앱 만들어줘"
         - Quality_Validator
     ```
 
+### 에이전트 원샷 프롬프트 (업데이트/업그레이드)
+
+```text
+재설치 없이 이 레포를 안전하게 업데이트하고 재검증하세요.
+
+레포 경로: <your-install-path>/antigravity-swarm
+
+작업 순서:
+1) 현재 git status와 branch 확인
+2) 최신 변경사항 안전하게 pull (파괴적 명령 금지)
+3) requirements.txt가 바뀐 경우에만 Python 의존성 갱신
+4) 검증 실행
+   - gemini --version
+   - python3 -m py_compile scripts/*.py scripts/core/*.py scripts/core/backends/*.py
+   - python3 scripts/orchestrator.py --demo
+5) nvim/neovim 설정 파일이 이 레포에 존재하고 변경된 경우 적용/업데이트, 아니면 "nvim 업데이트 불필요" 보고
+
+안전 규칙:
+- 파괴적 git 명령 금지 (reset --hard, clean -fd, force push, checkout --)
+- merge/rebase 충돌 발생 시 즉시 중단하고 충돌 파일 목록 보고
+
+최종 보고 형식:
+- Pull: 성공/실패
+- 의존성 갱신: 수행/미수행
+- 검증: 통과/실패
+- nvim 업데이트: 적용/스킵
+- 다음 액션: 1줄
+```
+
 ---
 
 ## 사용 가이드 (User Manual)
@@ -266,6 +282,47 @@ python3 scripts/ultrawork_loop.py --resume
 ### 경로 C: Antigravity IDE
 
 `~/.gemini/GEMINI.md`에 이 스킬을 연결하면, 복잡한 작업에서 메인 에이전트가 자동 호출할 수 있습니다.
+
+---
+
+## 사용 예시 프롬프트 (Example Prompts)
+
+어떻게 시작해야 할지 모르겠다면, 아래 프롬프트를 LLM 에이전트에게 복사-붙여넣기 하세요:
+
+### 기본 사용법
+
+```text
+antigravity-swarm 스킬을 이용해서 이 프로젝트에 대한 단위 테스트를 작성해줘.
+```
+
+```text
+antigravity-swarm 스킬을 이용해서 이 프로젝트의 인증 모듈을 리팩토링해줘.
+```
+
+### 고급 사용법
+
+```text
+antigravity-swarm 스킬의 fullstack 프리셋을 이용해서 React 기반의 Todo 앱을 만들어줘.
+```
+
+```text
+antigravity-swarm 스킬의 research 프리셋을 이용해서 코드베이스 아키텍처를 분석하고 문서를 생성해줘.
+```
+
+### CLI 직접 사용
+
+```bash
+# 프리셋을 이용한 빠른 미션
+python3 scripts/planner.py --preset quick "모든 Python 모듈에 단위 테스트 작성"
+python3 scripts/orchestrator.py --yes
+
+# 복잡한 작업을 위한 풀스택 팀
+python3 scripts/planner.py --preset fullstack "인증이 포함된 REST API 구축"
+python3 scripts/orchestrator.py --yes
+```
+
+> [!TIP]
+> IDE 에이전트에서 사용할 때는 **"antigravity-swarm 스킬을 이용해서 ~해줘"** 형식으로 자연어 프롬프트를 작성하면 됩니다.
 
 ---
 

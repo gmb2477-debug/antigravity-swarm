@@ -6,6 +6,7 @@ Single source of truth for all configuration constants and settings.
 
 import os
 import shutil
+import subprocess
 import yaml
 from dataclasses import dataclass, field, asdict
 from typing import Dict
@@ -34,6 +35,35 @@ def get_gemini_path():
     if path:
         return path
 
+    return None
+
+
+def ensure_gemini_cli():
+    """
+    Ensure the Gemini CLI is available, offering to install it if not found.
+
+    Returns:
+        str: Path to gemini executable, or None if not available
+    """
+    path = get_gemini_path()
+    if path:
+        return path
+
+    print("[Swarm] Gemini CLI not found.")
+
+    if shutil.which("npm"):
+        answer = input("[Swarm] Install Gemini CLI now? (npm install -g @google/gemini-cli) [y/N]: ").strip().lower()
+        if answer == "y":
+            try:
+                subprocess.run(["npm", "install", "-g", "@google/gemini-cli"], check=True)
+                return get_gemini_path()
+            except subprocess.CalledProcessError as e:
+                print(f"[Swarm] Installation failed: {e}")
+
+    print("[Swarm] Please install Gemini CLI manually:")
+    print("  npm install -g @google/gemini-cli")
+    print()
+    print("Then ensure 'gemini' is in your PATH, or set GEMINI_PATH environment variable.")
     return None
 
 
