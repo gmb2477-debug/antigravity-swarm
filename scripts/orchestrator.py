@@ -171,7 +171,7 @@ class KeyboardListener:
         finally:
             if self._old_settings:
                 try:
-                    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self._old_settings)
+                    termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, self._old_settings)
                 except Exception:
                     pass
 
@@ -184,7 +184,7 @@ class KeyboardListener:
         self._running = False
         if not WINDOWS_MODE and self._old_settings:
             try:
-                termios.tcsetattr(sys.stdin, termios.TCSADRAIN, self._old_settings)
+                termios.tcsetattr(sys.stdin.fileno(), termios.TCSADRAIN, self._old_settings)
             except Exception:
                 pass
 
