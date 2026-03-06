@@ -90,11 +90,11 @@ class KeyboardListener:
         self._old_settings = None
 
     def start(self):
-        if not WINDOWS_MODE and not sys.stdin.isatty():
+        if not sys.stdin.isatty():
             return
         self._running = True
         if not WINDOWS_MODE:
-            self._old_settings = termios.tcgetattr(sys.stdin)
+            self._old_settings = termios.tcgetattr(sys.stdin.fileno())
         self._thread = threading.Thread(target=self._listen, daemon=True)
         self._thread.start()
 
