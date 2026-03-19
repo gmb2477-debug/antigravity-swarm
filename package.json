@@ -1,17 +1,7 @@
-{
-  "name": "antigravity-swarm",
-  "version": "0.1.0",
-  "description": "Antigravity Sub-Agents Swarm Orchestrator",
-  "main": "scripts/orchestrator.py",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "gemini",
-    "agent",
-    "swarm",
-    "orchestration"
-  ],
-  "author": "Antigravity",
-  "license": "MIT"
-}
+config = yaml.safe_load(f)
+import json
+    # --- DEBUG START ---
+    print("\n[DEBUG] CONTENIDO EXACTO DEL YAML:")
+    print(json.dumps(config, indent=2))
+    print("[DEBUG] FIN DEL CONTENIDO\n")
+    # --- DEBUG END ---
